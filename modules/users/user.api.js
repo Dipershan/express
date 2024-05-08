@@ -15,7 +15,7 @@ const router =  require("express").Router();
  */
 
 
-router.post("/api/v1/register" ,(req , res , next)=>{
+router.post("/register" ,(req , res , next)=>{
     try {
         res.json({"msg" : "register"})
     } catch (error) {
@@ -23,22 +23,29 @@ router.post("/api/v1/register" ,(req , res , next)=>{
     }
 } );
 
-router.post("/api/v1/login" , (req ,  res ,  next)=>{
+router.post("/login" , (req ,  res ,  next)=>{
     try {
         res.json({"msg" : "Login User"})
     } catch (error) {
         next(error)
     }
 });
-router.post("/api/v1/forget" ,(req , res , next)=>{
+router.post("/forget" ,(req , res , next)=>{
     try {
         res.json({"msg" : "forgetin"})
     } catch (error) {
         next(error);
     }
 } );
+router.delete("/reset" , (req ,  res ,  next)=>{
+    try {
+        res.json({"msg" : "reset User"})
+    } catch (error) {
+        next(error)
+    }
+});
 
-router.post("/api/v1/verifyToken" , (req ,  res ,  next)=>{
+router.post("/verifyToken" , (req ,  res ,  next)=>{
     try {
         res.json({"msg" : "Token verify"})
     } catch (error) {
@@ -46,27 +53,46 @@ router.post("/api/v1/verifyToken" , (req ,  res ,  next)=>{
     }
 });
 
-router.patch("/api/v1/updateUser" ,(req , res , next)=>{
+router.post("/:id/changeStatus" , (req ,  res ,  next)=>{
     try {
-        res.json({"msg" : "user update"})
+        const { id }  = req.params.id ;
+        res.json({"msg" : "Status Changed"})
+    } catch (error) {
+        next(error)
+    }
+});
+
+
+router.patch("/updateUser/:id" ,(req , res , next)=>{
+    try {
+        const { id }  = req.params.id ;
+        res.json({"msg" : "user update"});
     } catch (error) {
         next(error);  
     }
 } );
 
-router.put("/api/v1/updateProfile" , (req ,  res ,  next)=>{
+
+//Update Profile
+router.put("/updateProfile/:id" , (req ,  res ,  next)=>{
     try {
+        const { id }  = req.params.id ;
         res.json({"msg" : "Profile Updated"})
     } catch (error) {
         next(error)
     }
 });
 
-router.patch("/api/v1/getUser" ,(req , res , next)=>{
+
+//GetUser
+router.patch("/getUser/:id" ,(req , res , next)=>{
     try {
+        const { id }  = req.params.id ;
         res.json({"msg" : " get user"})
     } catch (error) {
         next(error);
     }
 } );
 
+
+module.exports =  router;

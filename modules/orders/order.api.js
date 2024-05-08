@@ -6,41 +6,70 @@ const router =  require("express").Router();
  * read one order
  * delete the order
  * change the status of order
+ * updta
  */
-router.post("/api/v1/list" ,(req , res , next)=>{
+
+//Create
+router.post("/" ,(req , res , next)=>{
     try {
-        res.json({"msg" : "list"})
-    } catch (error) {
         
+        res.json({"msg" : "create order"})
+    } catch (error) {
+        next(error);
     }
 } );
 
-
-
-router.post("/api/v1/read" ,(req , res , next)=>{
+router.get("/" ,(req , res , next)=>{
     try {
-        res.json({"msg" : "read"})
-    } catch (error) {
         
-    }
-} );
-router.delete("/api/v1/delete" ,(req , res , next)=>{
-    try {
-        res.json({"msg" : "order"})
+        res.json({"msg" : "List order"})
     } catch (error) {
-        
+        next(error);
     }
 } );
 
-router.post("/api/v1/orders" ,(req , res , next)=>{
+//List one order
+router.get("/:id" ,(req , res , next)=>{
     try {
-        res.json({"msg" : "order"})
+        const { id }  = req.params.id ;
+        res.json({"msg" : "Get one order"})
     } catch (error) {
-        
+        next(error);
     }
 } );
 
+//Delete
+router.delete("/:id" ,(req , res , next)=>{
+    try {
+        const { id }  = req.params.id ;
+        res.json({"msg" : `Delete  order no ${id} `})
+    } catch (error) {
+        next(error);
+    }
+} );
 
+//Change  status data
+router.patch("/:id/status" ,(req , res , next)=>{
+    try {
+        const { id }  = req.params.id ;
+        
 
+        res.json({"msg" :  `Change  status of  one order by ${id} `})
+    } catch (error) {
+        next(error);
+    }
+} );
+
+//Update
+router.put("/:id" ,(req , res , next)=>{
+    try {
+        const { id }  = req.params.id ;
+        
+
+        res.json({"msg" :  `Update one  order by ${id} `})
+    } catch (error) {
+        next(error);
+    }
+} );
 
 module.exports =  router;

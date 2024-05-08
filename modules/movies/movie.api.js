@@ -58,3 +58,5 @@ router.patch("/api/v1/updateOneMovie" , (req ,  res ,  next)=>{
         next(error)
     }
 });
+
+module.exports =  router;
