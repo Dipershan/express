@@ -9,6 +9,16 @@ const router =  require("express").Router();
  * updta
  */
 
+const mw =  (req ,  res , next)=>{
+    const {username  , password} = req.headers;
+    if(username === "raktim" && password === "password"){
+        next();
+
+    }
+    res.status(404).json({msg:"User Authorized"});
+}
+
+
 //Create
 router.post("/" ,(req , res , next)=>{
     try {
@@ -19,7 +29,7 @@ router.post("/" ,(req , res , next)=>{
     }
 } );
 
-router.get("/" ,(req , res , next)=>{
+router.get("/" ,mw , (req , res , next)=>{
     try {
         
         res.json({"msg" : "List order"})

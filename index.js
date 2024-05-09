@@ -10,6 +10,14 @@ const PORT =  process.env.PORT;
 //I can parse request body as json || Middleware
 app.use(express.json());
 
+//MiddleWare (application level custom mw)
+app.use((req ,res , next)=>{
+    req.body.country = "NP";
+    req.body.currency =  "NPR";
+    req.body.currentTime = new Date().toISOString();
+    next();
+})
+
 //I am routing mechanism  , I will send the API index from/to indexrouter
 //Route Handling
 app.use("/" ,  indexRouter);

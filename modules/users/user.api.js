@@ -14,8 +14,8 @@ const router =  require("express").Router();
  * get one user
  */
 
-
-router.post("/register" ,(req , res , next)=>{
+//register
+router.post("/" ,(req , res , next)=>{
     try {
         res.json({"msg" : "register"})
     } catch (error) {
@@ -23,13 +23,17 @@ router.post("/register" ,(req , res , next)=>{
     }
 } );
 
-router.post("/login" , (req ,  res ,  next)=>{
+//Login
+router.post("/:id" , (req ,  res ,  next)=>{
     try {
+        const { id }  = req.params.id ;
         res.json({"msg" : "Login User"})
     } catch (error) {
         next(error)
     }
 });
+
+//Forget password
 router.post("/forget" ,(req , res , next)=>{
     try {
         res.json({"msg" : "forgetin"})
@@ -37,15 +41,33 @@ router.post("/forget" ,(req , res , next)=>{
         next(error);
     }
 } );
-router.delete("/reset" , (req ,  res ,  next)=>{
+
+
+//Change Password
+router.post("/change/:id" ,(req , res , next)=>{
     try {
+        const { id }  = req.params.id ;
+        res.json({"msg" :  `Chage password of id ${id}`})
+    } catch (error) {
+        next(error);
+    }
+} );
+
+
+
+
+//Delete
+router.delete("/:id" , (req ,  res ,  next)=>{
+    try {
+        const { id }  = req.params.id ;
         res.json({"msg" : "reset User"})
     } catch (error) {
         next(error)
     }
 });
 
-router.post("/verifyToken" , (req ,  res ,  next)=>{
+//Verify Tokken
+router.post("/verify" , (req ,  res ,  next)=>{
     try {
         res.json({"msg" : "Token verify"})
     } catch (error) {
@@ -53,7 +75,9 @@ router.post("/verifyToken" , (req ,  res ,  next)=>{
     }
 });
 
-router.post("/:id/changeStatus" , (req ,  res ,  next)=>{
+
+//Change Status
+router.patch("/:id/changeStatus" , (req ,  res ,  next)=>{
     try {
         const { id }  = req.params.id ;
         res.json({"msg" : "Status Changed"})
@@ -62,7 +86,7 @@ router.post("/:id/changeStatus" , (req ,  res ,  next)=>{
     }
 });
 
-
+//Update User
 router.patch("/updateUser/:id" ,(req , res , next)=>{
     try {
         const { id }  = req.params.id ;
