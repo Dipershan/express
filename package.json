@@ -12,8 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
+    "events": "^3.3.0",
     "express": "^4.19.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.13"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

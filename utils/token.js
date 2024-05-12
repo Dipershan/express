@@ -15,8 +15,8 @@ const generateToken = (payload) =>
 
 const verifyToken = (token) =>JWT.verify(token ,  process.env.JWT_SECRET);
 
-const checkRole =  ({sysRole ,  userRole})=>
-  userRole.some((role)=> sysRole.includes(role));
+const checkRole =  ({sysRole ,  userRole}) =>
+  userRole.some((role) => sysRole.includes(role));
 
 
 module.exports = {checkRole , generateToken ,verifyToken }

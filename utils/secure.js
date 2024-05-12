@@ -27,6 +27,7 @@ const secure = (sysRole) =>{
 
     return (req ,  res , next) =>{  
         try {
+           
             const {token} =  req.headers;
             //what to do if no token
             if(!token) throw Error("Token is missing");
@@ -35,6 +36,9 @@ const secure = (sysRole) =>{
             //TOken expired
             if(!isValid)  throw Error("Token is expired");
             const {data} =  isValid;
+            const validRole =  checkRole({sysRole , userRole: data?.roles || []});
+            if(!validRole) throw new Error("User unauthorizede");
+            next();
             console.log({data  ,  sysRole});
         } catch (error) {
             next(error)
