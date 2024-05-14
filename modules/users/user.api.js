@@ -63,7 +63,7 @@ router.post("/login"  , (req , res , next)=>{
     }
 })
 
-router.post("/register" , validator() ,  async(req ,  res , next)=>{
+router.post("/register" , validator ,  async(req ,  res , next)=>{
     try {
         const {email } = req.body;
         if(!email) throw Error ("Email  missing");
@@ -78,6 +78,10 @@ router.post("/register" , validator() ,  async(req ,  res , next)=>{
         next(error)
     }
 })
+
+
+
+
 
 
 router.post("/signup" , (req ,  res)=>{

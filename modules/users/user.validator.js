@@ -2,10 +2,17 @@ const Joi  = require("joi");
 
 //Schema
 
-const schema = Joi.object({
-    
+const schema = Joi.object
+({
+    name: Joi .string(),
     email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+        .email({
+             minDomainSegments: 1,
+             tlds: { allow: ['com'] 
+                    }
+                })
+    .required(),
+    
 
 })
 
@@ -13,12 +20,13 @@ const schema = Joi.object({
 const validator =async (req , res , next) =>{
     
 try {
-    const value = await schema.validateAsync({ email });
+    await schema.validateAsync(req.body);
+    next();
 }
 catch (err) { 
     next(err)
 }
-}
+};
 
 
 module.exports = {validator};

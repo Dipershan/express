@@ -11,12 +11,12 @@ const PORT =  process.env.PORT;
 app.use(express.json());
 
 //MiddleWare (application level custom mw)
-app.use((req ,res , next)=>{
-    req.body.country = "NP";
-    req.body.currency =  "NPR";
-    req.body.currentTime = new Date().toISOString();
-    next();
-})
+// app.use((req ,res , next)=>{
+//     req.body.country = "NP";
+//     req.body.currency =  "NPR";
+//     req.body.currentTime = new Date().toISOString();
+//     next();
+// })
 
 //I am routing mechanism  , I will send the API index from/to indexrouter
 //Route Handling
