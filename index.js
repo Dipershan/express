@@ -1,4 +1,5 @@
 require("dotenv").config();
+const morgan  =  require("morgan");
 const express =  require("express");
 
 const indexRouter =  require("./routes");
@@ -9,6 +10,8 @@ const PORT =  process.env.PORT;
 
 //I can parse request body as json || Middleware
 app.use(express.json());
+app.use(morgan("dev"));
+app.use(express.static("public"))
 
 //MiddleWare (application level custom mw)
 // app.use((req ,res , next)=>{

@@ -3,9 +3,10 @@ const {generateToken } = require("../../utils/token");
 const {secure} = require("../../utils/secure");
 const {sendMail} =  require("../../utils/mailer");
 const {validator} =  require("./user.validator")
+const multer = require("multer");
+// const upload = multer({ dest: 'public/upload' })
 const events = require("events");
 const eventEmitter = new events.EventEmitter();
-
 
 eventEmitter.addListener("signup" , (email)=>
     sendMail({
@@ -14,6 +15,32 @@ eventEmitter.addListener("signup" , (email)=>
         htmlMsg:"<b>Thanku for joining Movie Plex</b>"
     })
 )
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'public/upload')
+    },
+    filename: function (req, file, cb) {
+      console.log({file} ,Date.now());
+     cb(
+        null,
+         file.fieldname.concat(
+            "-", 
+            Date.now(),
+            "." ,
+            file.originalname.split(".")[1] 
+          ) //profile-1232.jpg
+        );
+    },
+    //How to limit size 1 mb limit??
+  });
+  
+  const upload = multer({ storage: storage });
+
+
+
+
+
 
 
 /**
@@ -63,7 +90,7 @@ router.post("/login"  , (req , res , next)=>{
     }
 })
 
-router.post("/register" , validator ,  async(req ,  res , next)=>{
+router.post("/register" , upload.single("profile"),validator ,  async(req ,  res , next)=>{
     try {
         const {email } = req.body;
         if(!email) throw Error ("Email  missing");

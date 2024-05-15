@@ -12,6 +12,7 @@ const schema = Joi.object
                     }
                 })
     .required(),
+    profile:Joi.string(),
     
 
 })
