@@ -4,6 +4,7 @@ const {secure} = require("../../utils/secure");
 const {sendMail} =  require("../../utils/mailer");
 const {validator} =  require("./user.validator")
 const multer = require("multer");
+const userController =  require('./user.controller');
 // const upload = multer({ dest: 'public/upload' })
 const events = require("events");
 const eventEmitter = new events.EventEmitter();
@@ -35,8 +36,10 @@ const storage = multer.diskStorage({
     //How to limit size 1 mb limit??
   });
   
-  const upload = multer({ storage: storage });
-
+  const upload = multer({
+  storage: storage,
+//   limits: { fileSize: 1024 * 1024 } // 1 MB limit
+});
 
 
 
@@ -91,9 +94,14 @@ router.post("/login"  , (req , res , next)=>{
 })
 
 router.post("/register" , upload.single("profile"),validator ,  async(req ,  res , next)=>{
+
     try {
         const {email } = req.body;
-        if(!email) throw Error ("Email  missing");
+        if(req.file){
+            req.body.profile = req.file.path;
+        }
+       const result = await  userController.create(req.body);
+       
 
         //call the nodemailer
        

@@ -12,7 +12,12 @@ const schema = Joi.object
                     }
                 })
     .required(),
-    profile:Joi.string(),
+    password: Joi.string().required(),
+    roles: Joi.string().items(Joi.string().valid("admin" ,  "user")),
+    image: Joi.string(),
+    isEmailVerified: Joi.boolean(),
+    Active :  Joi.boolean(),
+
     
 
 })

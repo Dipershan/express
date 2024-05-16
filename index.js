@@ -1,8 +1,15 @@
 require("dotenv").config();
 const morgan  =  require("morgan");
+const mongoose =  require("mongoose");
 const express =  require("express");
 
 const indexRouter =  require("./routes");
+
+mongoose.connect(process.env.DB_URL).then(()=>{
+    console.log("Database Connected sucessful")
+}).catch((e)=>{
+    console.log("Database erorr" ,e)
+})
 
 const router =  express.Router();
 const app  =  express();
