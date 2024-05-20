@@ -13,16 +13,17 @@ const userSchema = new Schema(
             type:String ,
             required:true
         },
-    roles: [
-        {
-            type:String,
-            enum:["admin" ,  "user"],
-            default:"user",
-            required:true,
-    },
-    ],
+        roles: {
+            type: [String],
+            default: ["user"],
+            require:true,
+        },
      image: {
         type: String
+    },
+    otp: {
+        type:String,
+        
     },
     isEmailVerified : {
         type:Boolean ,

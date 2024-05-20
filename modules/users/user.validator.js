@@ -13,8 +13,7 @@ const schema = Joi.object
                 })
     .required(),
     password: Joi.string().required(),
-    roles: Joi.string().items(Joi.string().valid("admin" ,  "user")),
-    image: Joi.string(),
+    roles: Joi.string().valid("admin", "user"),  // No .items() for a single string
     isEmailVerified: Joi.boolean(),
     Active :  Joi.boolean(),
 
