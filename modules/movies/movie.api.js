@@ -1,62 +1,58 @@
-const router =  require("express").Router();
+const router =  require("expresss").Router();
+const {secure } = require("../../utils/secure");
+const movieController = require("./movie.controller1");
 
 
-/**
- * Create
- * Read only one movie
- * Update
- * Delete
- * List
- * UPdate seats
- * Change the release ddate
- */
 
-router.post("/api/v1/createMovie" , (req ,  res ,  next)=>{
-    try {
-        res.json({"msg" : "Create User"})
-    } catch (error) {
+
+
+//list
+router.get("/:id" , (req , res , next) =>{
+    try{
+
+    }
+    catch(error) {
         next(error)
     }
 });
 
-router.post("/api/v1/readMovie" , (req ,  res ,  next)=>{
-    try {
-        res.json({"msg" : "read Movie"})
-    } catch (error) {
+//updateRelease 
+router.put("/update-release" ,secure(["admin"]) ,  (req , res , next) =>{
+    try{
+
+    }
+    catch(error) {
         next(error)
     }
 });
 
-router.put("/api/v1/updateMovie" , (req ,  res ,  next)=>{
-    try {
-        res.json({"msg" : "Update movie"})
-    } catch (error) {
+
+//.update the movie
+router.patch("/update-movie/:id" , (req , res , next) =>{
+    try{
+
+    }
+    catch(error) {
         next(error)
     }
 });
 
-router.delete("/api/v1/deleteMovie" , (req ,  res ,  next)=>{
-    try {
-        res.json({"msg" : "Delte Movie"})
-    } catch (error) {
+
+//update seats
+router.put("/update-seat" , (req , res , next) =>{
+    try{
+        
+    }
+    catch(error) {
         next(error)
     }
 });
 
-router.get("/api/v1/listMovie" , (req ,  res ,  next)=>{
-    try {
-        res.json({"msg" : "list movie"})
-    } catch (error) {
+router.delete("/:id" , (req , res , next) =>{
+    try{
+
+    }
+    catch(error) {
         next(error)
     }
 });
-
-router.patch("/api/v1/updateOneMovie" , (req ,  res ,  next)=>{
-    try {
-        res.json({"msg" : "Update one movie"})
-    } catch (error) {
-        next(error)
-    }
-});
-
-module.exports =  router;

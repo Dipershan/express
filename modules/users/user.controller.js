@@ -44,6 +44,7 @@ const login = async(payload) =>{
     const {email  , password} = payload;
     //check for email
     const user = await userModel.findOne({email , isActive: true});
+    //check if user exist
     if(!user) throw new Error("User not found");
     const isVerified =  user?.isEmailVerified;
     if(!isVerified) throw new Error("Email Verification required")

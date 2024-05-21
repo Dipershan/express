@@ -84,9 +84,10 @@ router.post("/generate-email-token"  , async(req , res , next)=>{
     } catch (error) {
         next(error)
     }
-})
+});
 
-router.post("/verify-email" ,  async(req ,  res ,  next)=>
+
+router.post("/verify-email-token" ,  async(req ,  res ,  next)=>
 {
     try
      {
@@ -100,14 +101,87 @@ router.post("/verify-email" ,  async(req ,  res ,  next)=>
 });
    
 
+    router.patch("/:id/block" ,  async(req , res, next)=>{
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
 
-router.post("/signup" , (req ,  res)=>{
-    try {
-        
-    } catch (error) {
-        next(error)
-        
-    }
-})
+    });
+
+    
+    router.delete("/:id" ,  async(req , res, next)=>{
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
+
+    });
+
+    
+    router.get("/profile" ,  async(req , res, next)=>{
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
+
+    })
+
+    
+    router.put("/profile" ,  async(req , res, next)=>{
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
+
+    })
+
+
+    
+    router.get("/:id" ,  async(req , res, next)=>{
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
+
+    });
+
+    
+    router.post("/change-passowrd" ,  async(req , res, next)=>{
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
+
+    });
+
+    
+    router.post("/reset-password" ,  async(req , res, next)=>{
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
+
+    })
+
+    
+    router.post("/forget-passoword" ,  async(req , res, next)=>{
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
+
+    })
+
+
+
 
 module.exports = router;
