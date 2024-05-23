@@ -1,3 +1,5 @@
 node_modules
 .env
-git
+play
+public/upload/movies/*
+public/upload/users/*

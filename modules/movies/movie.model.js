@@ -9,8 +9,10 @@ const movieSchema = new Schema({
         unique: true
     },
     slug :{
-
+        type:String,
+        unique:true,
     },
+    
     duration:{
         type:String,
     }  ,
@@ -28,6 +30,10 @@ const movieSchema = new Schema({
         default:Date.now(),
         
     },
+    endDate:{
+        type:Date,
+        required:true,
+    },
     seats:{
         type:Number,
         required:true,
@@ -38,4 +44,4 @@ const movieSchema = new Schema({
 
 });
 
-module.exports = model("movie" ,  movieSchema);
+module.exports = model("Movie" ,  movieSchema);

@@ -1,13 +1,52 @@
-const router =  require("expresss").Router();
+const router =  require("express").Router();
 const {secure } = require("../../utils/secure");
-const movieController = require("./movie.controller1");
+const movieController = require("./movie.controller");
+
+const multer = require("multer");
 
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'public/upload/movies')
+    },
+    filename: function (req, file, cb) {
+      console.log({file} ,Date.now());
+     cb(
+        null,
+         file.fieldname.concat(
+            "-", 
+            Date.now(),
+            "." ,
+            file.originalname.split(".")[1] 
+          ) //profile-1232.jpg
+        );
+    },
+    //How to limit size 1 mb limit??
+  });
+  const upload = multer({
+  storage: storage,
+//   limits: { fileSize: 1024 * 1024 } // 1 MB limit
+});
 
 
-router.get("/"  ,  (req ,  res ,  next)=>{
+//list
+router.get("/"  ,async(req ,  res ,  next)=>{
     try {
-       res.json({msg: "All movies list"}) 
+    const result =  await movieController.list();
+       res.json({msg: "All movies list" ,  data:result}) 
+    } catch (error) {
+        next(error)
+    }
+});
+
+router.post("/"  ,  secure(["admin"]),upload.single("poster") ,async(req ,  res ,  next)=>{
+    try {
+        if(req.file){
+            req.body.poster = req.file.path;
+        };
+        const result =  await movieController.create(req.body);
+
+       res.json({msg: "Created new movie" , data:result }) 
     } catch (error) {
         next(error)
     }
@@ -15,12 +54,13 @@ router.get("/"  ,  (req ,  res ,  next)=>{
 
 
 
+
 //Read one movie
 
-router.get("/:id" ,async(req , res , next) =>{
+router.get("/:slug" ,async(req , res , next) =>{
     try{
-        const {id}  =  req.params;
-        const result =  await movieController.getById(id)
+        const {slug}  =  req.params;
+        const result =  await movieController.getBySlug(id)
         res.json({msg:`Read one movie by ${id}`});
     }
     catch(error) {
@@ -77,3 +117,6 @@ router.delete("/:id" , async(req , res , next) =>{
         next(error)
     }
 });
+
+
+module.exports = router;

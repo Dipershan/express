@@ -29,14 +29,15 @@ const create = async(payload) =>{
     const {email  , password}  =  payload;
     const duplicateEmail =  await userModel.findOne({email});
     if(!duplicateEmail) throw new Error("Email already in use ")
+    //Hash the password
     payload.password =   genHash(password);
+    //create user
     const result = await userModel.create(payload);
+    //Emit signup event
+    eventEmitter.emit("signup" , email);
+
     return result;
 
-    
-        //call the nodemailer
-       
-        eventEmitter.emit("signup" , email);
 };
 
 
@@ -49,7 +50,7 @@ const login = async(payload) =>{
     const isVerified =  user?.isEmailVerified;
     if(!isVerified) throw new Error("Email Verification required")
     const isValidPw =  compareHash(user?.password , password);
-    if(!isValidPw)  throw new Error("Emailor password invalid");
+    if(!isValidPw)  throw new Error("Email or password invalid");
     const tokenPayload =  {
         name: user?.name,
         roles: user?.roles, 
@@ -57,7 +58,6 @@ const login = async(payload) =>{
     const token  =  generateToken(tokenPayload);
     if(!token)  throw new Error("Something is wrong");
     return token;
-
 }
 
 const getById = (id) => {

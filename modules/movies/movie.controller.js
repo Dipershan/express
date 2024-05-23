@@ -1,6 +1,6 @@
 
 const movieModel =  require("./movie.model");
-
+const {slugger} =  require("../../utils/text");
 
 
 
@@ -12,7 +12,7 @@ const create = async(payload) =>{
 
     const result  =  await movieModel.create(payload);
     //create slug from title (slugify)
-    const slug =  "";
+    const slug =  slugger(payload?.title);
     //check if the dlug exist in db
     const movie  = await movieMdoel.findOne({slug});;
     if(movie) throw new Error("Movie titlte is already in use");
@@ -20,6 +20,8 @@ const create = async(payload) =>{
     payload.slug =  slug;
     return movieModel.create(payload);
 };
+
+
 const list = () =>{
 
 }
@@ -27,7 +29,7 @@ const list = () =>{
 
 
 //
-const getById = (id)=>{
+const getBySlug = (slug)=>{
     return userModel.findOne({_id:id});
 };
 
@@ -61,7 +63,9 @@ const remove = (id) =>{
 module.exports = {
     create,
     getById,
-    updateupdateSeats,
+    list,
+    update,
+    updateSeats,
     updateReleaase,
     remove
 

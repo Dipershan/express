@@ -32,6 +32,8 @@ app.use(express.static("public"))
 //Route Handling
 app.use("/" ,  indexRouter);
 
+
+
 //Error Handling
 app.use((err , req , res, next) =>{
     const errorMsg =  err ? err.toString() : "Something went Wrong";
