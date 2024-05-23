@@ -3,6 +3,8 @@ const movieModel =  require("./movie.model");
 
 
 
+
+
 //movie create
 const create = async(payload) =>{
 
@@ -22,26 +24,37 @@ const list = () =>{
 
 }
 
+
+
+//
 const getById = (id)=>{
-    return userModel.findOne;
+    return userModel.findOne({_id:id});
 };
 
-
+//update release date
 const updateReleaase = (id , payload) =>{
-    return movieModel.findOneAndUpdate();
+    //check releaseDate is less than today(moment , luxon  ,  dta-fns
+    return movieModel.findOneAndUpdate({_id: id} ,  payload ,{new : true}); 
 };
 
-const update = (id , payload) =>{
-
+//update movie detial
+ const update = (id , payload) =>{
+    return movieModel.updateOne({_id:id} ,payload )
 };
 
+
+//update seat number (update seats)
 const updateSeats = (id  , payload) =>{
     //check if the movie seats are less than defined number
-    return movieModel
+    return movieModel.findOneAndUpdate({_id:id} ,  payload)
 };
 
+
+//delete movie
 const remove = (id) =>{
-    return userModel.deleteOne;
+    //movie ticket should not be sold
+    //movie should not ongoing (should not betwween release and date).
+    return userModel.deleteOne({_id:id});
 };
 
 
