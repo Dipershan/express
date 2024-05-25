@@ -25,7 +25,7 @@ const {verifyToken , checkRole} = require("./token");
 
 const secure = (sysRole) =>{
 
-    return (req ,  res , next) =>{  
+    return async(req ,  res , next) =>{  
         try {
            
             const {token} =  req.headers;
@@ -36,8 +36,18 @@ const secure = (sysRole) =>{
             //TOken expired
             if(!isValid)  throw Error("Token is expired");
             const {data} =  isValid;
+            //Check user email with database
+            const userInfo =  await userModel.findOne({
+                email: data?.email,
+                isActive: true,
+                isEmailVerified: true,
+            });
+            if(!userInfo) throw new Error("user not found");
+            //RBAC vs PBAAC vs ABAC
             const validRole =  checkRole({sysRole , userRole: data?.roles || []});
             if(!validRole) throw new Error("User unauthorizede");
+            req.currentUser = userInfo?._id;
+            // req.body.createdBy = userInfo?._id;
             next();
             console.log({data  ,  sysRole});
         } catch (error) {

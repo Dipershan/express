@@ -28,7 +28,7 @@ eventEmitter.addListener("emailVerification" , (email ,  otp)=>
 const create = async(payload) =>{
     const {email  , password}  =  payload;
     const duplicateEmail =  await userModel.findOne({email});
-    if(!duplicateEmail) throw new Error("Email already in use ")
+    // if(!duplicateEmail) throw new Error("Email already in use ");
     //Hash the password
     payload.password =   genHash(password);
     //create user
@@ -46,9 +46,9 @@ const login = async(payload) =>{
     //check for email
     const user = await userModel.findOne({email , isActive: true});
     //check if user exist
-    if(!user) throw new Error("User not found");
+    // if(!user) throw new Error("User not found");
     const isVerified =  user?.isEmailVerified;
-    if(!isVerified) throw new Error("Email Verification required")
+    if(!isVerified) throw new Error("Email Verification required");
     const isValidPw =  compareHash(user?.password , password);
     if(!isValidPw)  throw new Error("Email or password invalid");
     const tokenPayload =  {
@@ -57,7 +57,7 @@ const login = async(payload) =>{
     };
     const token  =  generateToken(tokenPayload);
     if(!token)  throw new Error("Something is wrong");
-    return token;
+    return token;S
 }
 
 const getById = (id) => {

@@ -1,4 +1,5 @@
 const {Schema  ,  model} = require("mongoose");
+const {ObjectId} =  Schema.Types;
 //SChema
 
 const movieSchema = new Schema({
@@ -39,9 +40,34 @@ const movieSchema = new Schema({
         required:true,
         default:0
     },
+    createdBy:{
+        type: ObjectId,
+        ref:"User",
+
+    },
+    updatedBy:{
+        type : ObjectId,
+        ref:""
+    }
+
 
 
 
 });
 
-module.exports = model("Movie" ,  movieSchema);
+https: module.exports = model("Movie" ,  movieSchema);
+
+/**
+ * STep 1
+ * update model
+ * const {ObjectId}  =  Schema.Types;
+ * type: ObjectId  ,  ref:"User"
+ * 
+ * Step 2
+ *  secure currentUser
+ * 
+ * Step 3
+ * use thereq.currentUser
+ * to add new req.body.createdBy / req.body.updateBy
+ * 
+ */

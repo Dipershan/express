@@ -1,7 +1,7 @@
 
 const movieModel =  require("./movie.model");
 const {slugger} =  require("../../utils/text");
-
+const moment = require("moment");
 
 
 
@@ -22,7 +22,40 @@ const create = async(payload) =>{
 };
 
 
-const list = () =>{
+const list = async() =>{
+    console.log({page , limit});
+    const query =  [];
+    query.push(    {
+    '$facet': {
+      'metadata': [
+        {
+          '$count': 'total'
+        }
+      ], 
+      'data': [
+        {
+          '$skip': 0
+        }, {
+          '$limit': 1
+        }
+      ]
+    }
+  }, {
+    '$addFields': {
+      'total': {
+        '$arrayElemAt': [
+          '$metadata.total', 0
+        ]
+      }
+    }
+  }, {
+    '$project': {
+      'metadata': 0, 
+      'data.password': 0
+    }
+  });
+    return userModel.aggregate();
+
 
 }
 
@@ -30,39 +63,53 @@ const list = () =>{
 
 //
 const getBySlug = (slug)=>{
-    return userModel.findOne({_id:id});
+    return userModel.getBySlug({slug:id});
 };
 
 //update release date
-const updateReleaase = (id , payload) =>{
-    //check releaseDate is less than today(moment , luxon  ,  dta-fns
-    return movieModel.findOneAndUpdate({_id: id} ,  payload ,{new : true}); 
+const updateReleaase = (slug , payload) =>{
+    //TODO check releaseDate is less than today(moment , luxon  ,  dta-fns
+    return movieModel.findOneAndUpdate({slug} ,  payload ,{new : true}); 
 };
 
 //update movie detial
- const update = (id , payload) =>{
-    return movieModel.updateOne({_id:id} ,payload )
+ const update = (slug , payload) =>{
+    if(payload.title){
+    payload.slug =  slugger(payload?.title)        ;
+    }
+    return movieModel.updateOne({slug} ,payload )
 };
 
 
 //update seat number (update seats)
-const updateSeats = (id  , payload) =>{
+const updateSeats =async (slug  , payload) =>{
     //check if the movie seats are less than defined number
+    if(payload.seats < process.env.NO_OF_SEATS){
+        const movie  =  await movieModel.findOne({slug})
+        throw new Error(`Movie seats cant be less than ${process.env.NO_OF_SEATS}`)
+    }
     return movieModel.findOneAndUpdate({_id:id} ,  payload)
 };
 
 
 //delete movie
-const remove = (id) =>{
+const remove  = async(slug) =>{
+    const movie  =  await movieModel.findOne({slug});
     //movie ticket should not be sold
-    //movie should not ongoing (should not betwween release and date).
-    return userModel.deleteOne({_id:id});
+    
+    if(
+        moment(movie?.releaseDate).isBefore(moment()) &&
+    moment(movie?.endDate).isAfter(moment())
+    ){
+        throw new Error("MOvie is currently running..")
+    }
+    return userModel.deleteOne({slug});
 };
 
 
 module.exports = {
     create,
-    getById,
+    getBySlug,
     list,
     update,
     updateSeats,

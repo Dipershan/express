@@ -44,6 +44,7 @@ router.post("/"  ,  secure(["admin"]),upload.single("poster") ,async(req ,  res 
         if(req.file){
             req.body.poster = req.file.path;
         };
+        req.body.createdBy =  req.currentUser;
         const result =  await movieController.create(req.body);
 
        res.json({msg: "Created new movie" , data:result }) 
@@ -60,8 +61,8 @@ router.post("/"  ,  secure(["admin"]),upload.single("poster") ,async(req ,  res 
 router.get("/:slug" ,async(req , res , next) =>{
     try{
         const {slug}  =  req.params;
-        const result =  await movieController.getBySlug(id)
-        res.json({msg:`Read one movie by ${id}`});
+        const result =  await movieController.update(id ,  req.body);
+        res.json({msg:`Read one movie by ${slug}` , data :result});
     }
     catch(error) {
         next(error)
@@ -71,10 +72,10 @@ router.get("/:slug" ,async(req , res , next) =>{
 
 
 //updateRelease 
-router.put("/:id/release-date" ,secure(["admin"]) ,  (req , res , next) =>{
+router.put("/:slug" ,secure(["admin"]) ,upload.single("poster") , (req , res , next) =>{
     try{
-    const {id} = req.params;
-    res.json({msg:`Update one movie by ${id}`});
+    const {slug} = req.params;
+    res.json({msg:`Update one movie by ${slug}` ,  data :result});
     }
     catch(error) {
         next(error)
@@ -83,10 +84,12 @@ router.put("/:id/release-date" ,secure(["admin"]) ,  (req , res , next) =>{
 
 
 //.update the seats number 
-router.patch("/:id/seats" , (req , res , next) =>{
+router.patch("/:slug/seats" , async(req , res , next) =>{
     try{
-        const {id} = req.params;
-        res.json({msg:`Update the  seats numebr of one movie by ${id}`});
+        const {slug} = req.params;
+        req.body.updatedBy =  req.currentUser;
+        const result =  await movieController.updateSeats(slug ,  req.body)
+        res.json({msg:`Update the  seats numebr of one movie by ${slug}`});
     }
     catch(error) {
         next(error)
@@ -95,22 +98,24 @@ router.patch("/:id/seats" , (req , res , next) =>{
 
 
 //.update one movie
-router.put("/:id" ,secure(['admin']) , async(req , res , next) =>{
+router.put("/:slug" ,secure(['admin']) , upload.single("poster"),async(req , res , next) =>{
     try{
-        const {id} = req.params;
+        const {slug} = req.params;
+        //IMP
+        req.body.updatedBy =  req.currentUser;
         const result = await movieController.update(id ,  req.body)
-        res.json({msg:`Update one movie by ${id}`  ,  data: result});
+        res.json({msg:`Update one movie by ${slug}`  ,  data: result});
     }
     catch(error) {
         next(error)
     }
 });
 
-router.delete("/:id" , async(req , res , next) =>{
+router.delete("/:slug" , async(req , res , next) =>{
     try{
-        const {id} = req.params;
+        const {slug} = req.params;
         const result = await movieController.remove(id )
-        res.json({msg:`delete movie by ${id}`  ,  data: result});        
+        res.json({msg:`delete movie by ${slug}`  ,  data: result});        
 
     }
     catch(error) {
