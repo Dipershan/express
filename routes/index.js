@@ -24,7 +24,7 @@ router.get("/api/v1",(req ,  res , next) =>{
 
  router.use("/api/v1/movies" , movieRouter);
  router.use("/api/v1/orders" , orderRouter);
- router.use("/api/v1/user" , userRouter);
+ router.use("/api/v1/users" , userRouter);
 
 module.exports  = router;
 

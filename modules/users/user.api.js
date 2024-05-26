@@ -53,9 +53,13 @@ router.post('/login', async (req, res, next) => {
 
 // Add more routes as necessary, ensuring each has appropriate logging
 
-router.get('/', secure(['admin']), (req, res, next) => {
-    console.log('Get users list');
+router.get('/', secure(['admin']), async(req, res, next) => {
+    
     try {
+        const {page ,  limit , name}  = req.query;
+        const search = {name , email}
+        const data = await userController.list({page,  limit , search});
+        
         res.json({ msg: 'User list generated', data: [] });
     } catch (error) {
         next(error);

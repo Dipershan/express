@@ -39,7 +39,9 @@ router.get("/"  ,async(req ,  res ,  next)=>{
     }
 });
 
-router.post("/"  ,  secure(["admin"]),upload.single("poster") ,async(req ,  res ,  next)=>{
+
+// secure(["admin"])
+router.post("/"  ,upload.single("poster") ,async(req ,  res ,  next)=>{
     try {
         if(req.file){
             req.body.poster = req.file.path;

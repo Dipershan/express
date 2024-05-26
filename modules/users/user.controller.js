@@ -41,31 +41,125 @@ const create = async(payload) =>{
 };
 
 
-const login = async(payload) =>{
-    const {email  , password} = payload;
-    //check for email
-    const user = await userModel.findOne({email , isActive: true});
-    //check if user exist
-    // if(!user) throw new Error("User not found");
-    const isVerified =  user?.isEmailVerified;
-    if(!isVerified) throw new Error("Email Verification required");
-    const isValidPw =  compareHash(user?.password , password);
-    if(!isValidPw)  throw new Error("Email or password invalid");
-    const tokenPayload =  {
-        name: user?.name,
-        roles: user?.roles, 
-    };
-    const token  =  generateToken(tokenPayload);
-    if(!token)  throw new Error("Something is wrong");
-    return token;S
-}
+const login = async (payload) => {
+    const { email, password } = payload;
 
-const getById = (id) => {
-    return userModel.findOne({_id:id});
+    // Check for user by email and if they are active
+    const user = await userModel.findOne({ email, isActive: true });
+
+    // Check if user exists
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    // Check if the user's email is verified
+    const isVerified = user.isEmailVerified;
+    if (!isVerified) {
+        throw new Error("Email Verification required");
+    }
+
+    // Validate the password
+    const isValidPw = compareHash(user.password, password);
+    if (!isValidPw) {
+        throw new Error("Email or password invalid");
+    }
+
+    // Prepare token payload
+    const tokenPayload = {
+        name: user.name,
+        roles: user.roles,
+    };
+
+    // Generate token
+    const token = generateToken(tokenPayload);
+    if (!token) {
+        throw new Error("Something went wrong");
+    }
+
+    return token;
 };
 
-const list = () =>{
-    return userModel.find(payload);
+
+const getById = (id)=>{
+    return userModel.getById({_id:id});
+};
+
+const list = async() =>{
+    
+    const query =  [];
+    //Search
+    if(search?.name){
+        query.push(
+            
+                {
+                  '$match': {
+                    'name': new RegExp(search?.name, 'gi')
+                  },
+                }
+            );
+    }
+
+
+    if(search?.email){
+        query.push(
+            
+                {
+                  '$match': {
+                    'email': new RegExp(search?.name, 'gi')
+                  },
+                }
+            );
+    }
+    //Sort
+    query.push({
+        $sort:{
+            createdAt:1,
+            
+        }
+    })
+    //Filter
+    
+    //Pagination 
+    query.push(  
+    
+          {
+    $facet: {
+      metadata: [
+        {
+          $count: total
+        }
+      ], 
+      data: [
+        {
+          $skip: (+page -1) * +limit,
+        }, {
+          $limit: +limit,
+        }
+      ]
+    }
+  }, {
+    $addFields: {
+      total: {
+        '$arrayElemAt': [
+          '$metadata.total', 0
+        ]
+      }
+    }
+  }, {
+    '$project': {
+      'metadata': 0, 
+      'data.password': 0
+    }
+  });
+    const result =  await userModel.aggregate(query);
+    return  {
+        total: result[0]?.total || 0,
+        users: result[0]?.data,
+        page:+page,
+        limit:+limit,
+    }
+
+
 };
 
 const updateById = (id , payload) =>{
@@ -121,6 +215,7 @@ const verifyEmailToken = async(payload) =>{
 module.exports = {
     create ,
     login , 
+    getById,
     generateEmailToken,
     verifyEmailToken
 }

@@ -1,5 +1,6 @@
 const router =  require("express").Router();
-const {mw  , mw1} =  require("../../utils/secure")
+const { secure } =  require("../../utils/secure");
+const orderController = require("./order.controller");
 
 /**
  * Create
@@ -11,12 +12,12 @@ const {mw  , mw1} =  require("../../utils/secure")
  */
 
 
-
-//Create
-router.post("/"  , (req , res , next)=>{
+///secure()
+router.post("/"  ,async (req , res , next)=>{
     try {
+        const result = await orderController.create(req.body);
         
-        res.json({"msg" : "create order"})
+        res.json({"msg" : "created order"  ,  data:result})
     } catch (error) {
         next(error);
     }

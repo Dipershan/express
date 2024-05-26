@@ -22,49 +22,16 @@ const create = async(payload) =>{
 };
 
 
-const list = async() =>{
-    console.log({page , limit});
-    const query =  [];
-    query.push(    {
-    '$facet': {
-      'metadata': [
-        {
-          '$count': 'total'
-        }
-      ], 
-      'data': [
-        {
-          '$skip': 0
-        }, {
-          '$limit': 1
-        }
-      ]
-    }
-  }, {
-    '$addFields': {
-      'total': {
-        '$arrayElemAt': [
-          '$metadata.total', 0
-        ]
-      }
-    }
-  }, {
-    '$project': {
-      'metadata': 0, 
-      'data.password': 0
-    }
-  });
-    return userModel.aggregate();
-
-
+const list = () =>{
+    return movieModel.findOne();
 }
 
 
 
 //
-const getBySlug = (slug)=>{
-    return userModel.getBySlug({slug:id});
-};
+// const getBySlug = (slug)=>{
+//     return userModel.getBySlug({slug:id});
+// };
 
 //update release date
 const updateReleaase = (slug , payload) =>{
@@ -109,7 +76,6 @@ const remove  = async(slug) =>{
 
 module.exports = {
     create,
-    getBySlug,
     list,
     update,
     updateSeats,
